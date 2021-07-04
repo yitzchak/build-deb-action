@@ -19,6 +19,8 @@ if [ -n "$INPUT_HOST_ARCH" ]; then
 	printf 'APT::Get::Host-Architecture "%s";\n' "$INPUT_HOST_ARCH" >> "$APT_CONF_FILE"
 fi
 
+printf "%s\n" "$INPUT_APT_SOURCES" > /etc/apt/sources.list.d/build-deb-action.list
+
 apt-get update
 
 apt-get build-dep $INPUT_APT_OPTS -- "./$INPUT_SOURCE_DIR"

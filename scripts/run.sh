@@ -57,13 +57,17 @@ if ! check_path_prefix "$INPUT_SOURCE_DIR" "$GITHUB_WORKSPACE"; then
 	exit 2
 fi
 
+
 start_group "Preparing build container"
-env > "$env_file"
+# Docker does not like variable values containing newlines in an --env-file, we
+# will pass it separately:
+env --unset=INPUT_APT_SOURCES > "$env_file"
 container_id=$(docker run \
 	--detach \
 	--env-file="$env_file" \
 	--env=GITHUB_ACTION_PATH=/github/action \
 	--env=GITHUB_WORKSPACE=/github/workspace \
+	--env=INPUT_APT_SOURCES \
 	--rm \
 	--volume="$GITHUB_ACTION_PATH":/github/action \
 	--volume="$GITHUB_WORKSPACE":/github/workspace \

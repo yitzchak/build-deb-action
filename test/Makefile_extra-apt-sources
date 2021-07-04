@@ -1,0 +1,5 @@
+
+.PHONY: test
+test:
+	section=$$(dpkg-query -f '$${Section}' -W libfaac0) && test "$${section%/*}" = non-free
+	test "$$(dpkg-query -f '$${db:Status-Abbrev}' -W libfaac0)" = "ii "

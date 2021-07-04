@@ -88,6 +88,31 @@ jobs:
           test -f debian/artifacts/test_1_i386.buildinfo
           test -f debian/artifacts/test_1_i386.changes
 
+  extra-apt-sources:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cat test/Makefile_extra-apt-sources >> test/Makefile
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          apt-sources: |
+            # These are intentionally on two separate lines:
+            deb http://deb.debian.org/debian stable contrib
+            deb http://deb.debian.org/debian stable non-free
+          buildpackage-opts: --build=binary --no-sign
+          # Install one of the smallest packages from non-free that itself has
+          # minimal dependencies:
+          # Selected with `aptitude search -Odebsize -F '%D %I %p' '~snon-free'`
+          extra-build-deps: libfaac0
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+
   extra-build-deps:
     runs-on: ubuntu-latest
     steps:

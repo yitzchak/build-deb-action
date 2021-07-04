@@ -5,6 +5,9 @@ inputs:
   apt-opts:
     description: Options to be passed to apt-get
     required: false
+  apt-sources:
+    description: Extra APT sources
+    required: false
   artifacts-dir:
     default: debian/artifacts
     description: Directory path relative to $GITHUB_WORKSPACE to place the built packages in
@@ -33,6 +36,7 @@ runs:
         # Manually setting INPUT_* variables here until
         # https://github.com/actions/runner/issues/665 is resolved:
         INPUT_APT_OPTS: ${{ inputs.apt-opts }}
+        INPUT_APT_SOURCES: ${{  inputs.apt-sources }}
         INPUT_ARTIFACTS_DIR: ${{ inputs.artifacts-dir }}
         INPUT_BUILDPACKAGE_OPTS: ${{ inputs.buildpackage-opts }}
         INPUT_HOST_ARCH: ${{ inputs.host-arch }}
