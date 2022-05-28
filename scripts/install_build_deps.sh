@@ -21,6 +21,8 @@ fi
 
 apt-get update
 
+apt-get upgrade
+
 apt-get build-dep $INPUT_APT_OPTS -- "./$INPUT_SOURCE_DIR"
 
 # In theory, explicitly installing dpkg-dev would not be necessary. `apt-get
